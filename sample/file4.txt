@@ -1,0 +1,6 @@
+{"id": "abc1", "state" : "STARTED", "type" : "APPLICATION_LOG", "host": "12", "timestamp": 1491377495204}
+{"id": "abc2", "state" : "STARTED", "type" : "APPLICATION_LOG", "host": "12", "timestamp": 1491377495304}
+{"id": "abc2", "state" : "FINISHED", "timestamp": 1491377495314}
+{"id": "abc1", "state" : "FINISHED", "timestamp": 1491377495214}
+{"id": "abc3", "state" : "STARTED", "type" : "APPLICATION_LOG", "host": "12", "timestamp": 1491377495304}
+{"id": "abc3", "state" : "FINISHED", "timestamp": 1491377495314}
