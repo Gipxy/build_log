@@ -1,4 +1,4 @@
-package com.test.model;
+package com.cs1.model;
 
 public class BuildLog {
     private String id;

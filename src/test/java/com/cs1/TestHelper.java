@@ -1,7 +1,7 @@
-package com.test;
+package com.cs1;
 
-import com.test.db.DBService;
-import com.test.model.BuildEvent;
+import com.cs1.db.DBService;
+import com.cs1.model.BuildEvent;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;

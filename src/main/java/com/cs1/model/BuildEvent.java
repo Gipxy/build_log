@@ -1,4 +1,4 @@
-package com.test.model;
+package com.cs1.model;
 
 public class BuildEvent {
     private String id;
@@ -67,5 +67,18 @@ public class BuildEvent {
 
     public boolean checkIsCompleted() {
         return getStartedTime() != null && getFinishedTime() != null;
+    }
+
+    @Override
+    public String toString() {
+        return "BuildEvent{" +
+                "id='" + id + '\'' +
+                ", startedTime=" + startedTime +
+                ", finishedTime=" + finishedTime +
+                ", duration=" + duration +
+                ", type='" + type + '\'' +
+                ", host='" + host + '\'' +
+                ", alert=" + alert +
+                '}';
     }
 }

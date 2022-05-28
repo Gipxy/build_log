@@ -1,13 +1,14 @@
-package com.test.task;
+package com.cs1.task;
 
-import com.test.Config;
-import com.test.db.DBService;
-import com.test.model.BuildEvent;
-import com.test.model.BuildLog;
-import com.test.model.LogState;
+import com.cs1.Config;
+import com.cs1.db.DBService;
+import com.cs1.model.BuildEvent;
+import com.cs1.model.BuildLog;
+import com.cs1.model.LogState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -26,20 +27,24 @@ public class BuildLogProcessorTask implements ProcessorTask<BuildLog> {
         }
 
         log.debug("Process log line: {}", buildLog);
-        BuildEvent buildEvent = eventMap.get(buildLog.getId());
-        if (buildEvent==null) {
-            buildEvent= new BuildEvent();
-            eventMap.put(buildLog.getId(), buildEvent);
+        BuildEvent buildEvent;
+        boolean isCompleted;
+        synchronized (eventMap) {
+            if (!eventMap.containsKey(buildLog.getId())) {
+                buildEvent = new BuildEvent();
+                eventMap.put(buildLog.getId(), buildEvent);
+            } else {
+                buildEvent = eventMap.get(buildLog.getId());
+            }
+
+            log2event(buildLog, buildEvent);
+            isCompleted = buildEvent.checkIsCompleted();
         }
 
-        log2event(buildLog, buildEvent);
-
-        if (buildEvent.checkIsCompleted()) {
+        if (isCompleted) {
             handleCompleted(buildEvent);
         }
     }
-
-
 
     private void log2event(BuildLog buildLog, BuildEvent buildEvent) {
         if (buildEvent.getId() == null) {
@@ -63,11 +68,10 @@ public class BuildLogProcessorTask implements ProcessorTask<BuildLog> {
 
     private void handleCompleted(BuildEvent buildEvent) {
         log.debug("Handle done: {}", buildEvent);
-
         long count = countCompleted.incrementAndGet();
 
         if (count %1000 == 0) {
-            log.info("Done {} records ", count);
+            log.info("Done {} records, cache size: {}", count, eventMap.keySet().size());
         }
 
         buildEvent.setDuration(buildEvent.getFinishedTime()-buildEvent.getStartedTime());
@@ -77,7 +81,13 @@ public class BuildLogProcessorTask implements ProcessorTask<BuildLog> {
             log.info("Alert event: {}", buildEvent);
         }
 
-        DBService.inst().insert(buildEvent);
+        try {
+            DBService.inst().insert(buildEvent);
+        } catch (SQLException ex) {
+            log.warn("Error when insert !", ex);
+        }
+
+        log.debug("inserted!");
 
         eventMap.remove(buildEvent.getId());
 

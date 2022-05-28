@@ -1,8 +1,8 @@
-package com.test.task;
+package com.cs1.task;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.test.model.BuildLog;
+import com.cs1.model.BuildLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

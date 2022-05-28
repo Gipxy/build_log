@@ -1,7 +1,7 @@
-package com.test;
+package com.cs1;
 
-import com.test.db.DBService;
-import com.test.model.BuildEvent;
+import com.cs1.db.DBService;
+import com.cs1.model.BuildEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.test.TestHelper.getAllBuildEvent;
+import static com.cs1.TestHelper.getAllBuildEvent;
 
 public class LogProcessorTest {
     private static final Logger log  = LoggerFactory.getLogger(LogProcessorTest.class);
@@ -96,6 +96,7 @@ public class LogProcessorTest {
 
         List<BuildEvent> buildEventList = getAllBuildEvent();
 
+        log.info("Verify:");
         Assertions.assertEquals(1, buildEventList.size());
         Assertions.assertFalse(buildEventList.get(0).isAlert());
 

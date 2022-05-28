@@ -1,14 +1,11 @@
-package com.test.db;
+package com.cs1.db;
 
-import com.test.model.BuildEvent;
+import com.cs1.model.BuildEvent;
 import org.apache.commons.dbutils.QueryRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DBService {
     private static final Logger log  = LoggerFactory.getLogger(DBService.class);
@@ -16,6 +13,11 @@ public class DBService {
     private Connection connection;
 
     private DBService() {
+        try {
+            Class.forName("org.hsqldb.jdbcDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static DBService inst() {
@@ -23,6 +25,8 @@ public class DBService {
     }
 
     public Connection getConnection()  {
+
+
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection("jdbc:hsqldb:file:data/builds", "app1", "p1");
@@ -47,19 +51,20 @@ public class DBService {
         }
     }
 
-    public void insert(BuildEvent buildEvent) {
-        QueryRunner run = new QueryRunner();
-        try {
-            run.update( getConnection(),"INSERT INTO BUILD_EVENT " +
-                            "(id,started_time,finished_time, duration, type, host, alert) " +
-                            "VALUES (?,?,?,?,?,?,?)",
-                    buildEvent.getId(), buildEvent.getStartedTime(),
-                    buildEvent.getFinishedTime(), buildEvent.getDuration(),
-                    buildEvent.getType(), buildEvent.getHost(), buildEvent.isAlert());
-
-            getConnection().commit();
-        } catch (SQLException ex) {
-            log.warn("Error when insert", ex);
+    public void insert(BuildEvent buildEvent) throws SQLException {
+        String sql ="INSERT INTO BUILD_EVENT " +
+                "(id,started_time,finished_time, duration, type, host, alert) " +
+                "VALUES (?,?,?,?,?,?,?)";
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, buildEvent.getId());
+            pstmt.setLong(2, buildEvent.getStartedTime());
+            pstmt.setLong(3, buildEvent.getFinishedTime());
+            pstmt.setLong(4, buildEvent.getDuration());
+            pstmt.setString(5, buildEvent.getType());
+            pstmt.setString(6, buildEvent.getHost());
+            pstmt.setBoolean(7, buildEvent.isAlert());
+            pstmt.executeUpdate();
+            connection.commit();
         }
     }
 }
