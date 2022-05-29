@@ -16,12 +16,12 @@ import java.util.stream.Stream;
 
 public class LogProcessor {
     private static final Logger log  = LoggerFactory.getLogger(LogProcessor.class);
+    public static final int PARALLELISM = 4;
 
     private final ParserTask<BuildLog> parserTask;
     private final ProcessorTask<BuildLog> processorTask;
 
     private final AtomicLong count = new AtomicLong();
-
 
     public LogProcessor(ParserTask<BuildLog> parserTask, ProcessorTask<BuildLog> processorTask) {
         this.parserTask = parserTask;
@@ -30,7 +30,7 @@ public class LogProcessor {
 
     public void process(String filePath) {
         log.info("Processing file: {}", filePath);
-        ForkJoinPool customThreadPool = new ForkJoinPool(4);
+        ForkJoinPool customThreadPool = new ForkJoinPool(PARALLELISM);
         try {
             customThreadPool.submit( () -> {
                 try (Stream<String> lines = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8);){
