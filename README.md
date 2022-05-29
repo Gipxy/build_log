@@ -10,8 +10,8 @@ mvn clean test
 * Run performance test
 ```
 mvn clean test-compile exec:java -Dexec.mainClass="com.cs1.PerfTest" -Dexec.cleanupDaemonThreads=false -Dexec.classpathScope=test
-Performance result for log file of 20000 lines: 
 ```
+* Performance result for log file of 20000 lines: 
 ```
 INFO  com.cs1.PerfTest - Time taken in ms (gen, process, fetch) with n=10000: (363, 4616, 241)
 ```
