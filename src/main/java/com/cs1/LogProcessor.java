@@ -29,6 +29,7 @@ public class LogProcessor {
     }
 
     public void process(String filePath) {
+        log.info("Processing file: {}", filePath);
         ForkJoinPool customThreadPool = new ForkJoinPool(4);
         try {
             customThreadPool.submit( () -> {
