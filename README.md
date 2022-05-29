@@ -10,6 +10,10 @@ mvn clean test
 * Run performance test
 ```
 mvn clean test-compile exec:java -Dexec.mainClass="com.cs1.PerfTest" -Dexec.cleanupDaemonThreads=false -Dexec.classpathScope=test
+Performance result for log file of 20000 lines: 
+```
+```
+INFO  com.cs1.PerfTest - Time taken in ms (gen, process, fetch) with n=10000: (363, 4616, 241)
 ```
 ## Notes
 Can't run this with 1millions of lines, this is due to HSQLDB (not sure HSQLDB does not support and any special setting required here!)
