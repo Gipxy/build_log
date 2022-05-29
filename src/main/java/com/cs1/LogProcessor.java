@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
@@ -31,7 +30,6 @@ public class LogProcessor {
 
     public void process(String filePath) {
         ForkJoinPool customThreadPool = new ForkJoinPool(4);
-
         try {
             customThreadPool.submit( () -> {
                 try (Stream<String> lines = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8);){

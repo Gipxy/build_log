@@ -77,8 +77,6 @@
             <version>2.13.3</version>
         </dependency>
 
-
-
     </dependencies>
 
     <build>
@@ -101,15 +99,11 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.cs1.App</mainClass>
-                        </manifest>
-                    </archive>
+                    <mainClass>com.cs1.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>
